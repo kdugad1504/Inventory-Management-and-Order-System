@@ -14,7 +14,6 @@ class Quantity { // In this class only Quantity of Products gets manipulated
     void sub_q(int z) {
         q -= z;
     }
-
 }
 
 public class Order extends Quantity { // subclass of Quantity
@@ -37,36 +36,43 @@ public class Order extends Quantity { // subclass of Quantity
     static Order HB = new Order(MAX_VALUE); // Handmade books
     static Order MS = new Order(MAX_VALUE); // Metal Straws
 
+    static int Pen_p = 20;
+    static int TB_p  = 50;
+    static int HB_p = 120;
+    static int MS_p = 30;
+
+    static int amt = 0;
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
         int orderCount = 0;
         int userChoice;
         do {
-            System.out.println("Enter\n1]Create Order\n2]Add Quantity\n3]Finish");
+            System.out.println("Enter\n1]Create Order\n2]Add Quantity\n3]Display Quantities\n4]Finish");
             userChoice = scanner.nextInt();
             switch (userChoice) {
                 case 1:
-                    createOrder();
+                    createOrder(scanner);
                     orderCount++;
                     System.out.println("Orders count: " + orderCount);
-                    displayQuantities();
                     break;
                 case 2:
-                    addQuantity();
+                    addQuantity(scanner);
                     break;
                 case 3:
+                    displayQuantities();
+                    break;
+                case 4:
                     System.out.println("It was a GREAT DAY!!");
                     break;
                 default:
                     System.out.println("Invalid Input");
             }
-        } while (userChoice != 3);
-
+        } while (userChoice != 4);
     }
 
-    static void addQuantity() { // To select the product and updating it's quantity
-        Scanner scanner = new Scanner(System.in);
+    static void addQuantity(Scanner scanner) { // To select the product and updating its quantity
         int productChoice;
         do {
             System.out.println(
@@ -99,8 +105,7 @@ public class Order extends Quantity { // subclass of Quantity
         } while (productChoice != 5);
     }
 
-    static void createOrder() { // To select the product and reduce the quantity
-        Scanner scanner = new Scanner(System.in);
+    static void createOrder(Scanner scanner) { // To select the product and reduce the quantity
         int productChoice;
         do {
             System.out.println(
@@ -109,19 +114,27 @@ public class Order extends Quantity { // subclass of Quantity
             switch (productChoice) {
                 case 1:
                     System.out.print("Enter quantity for Seed pen: ");
-                    input_o(Pen, scanner.nextInt());
+                    int penQuantity = scanner.nextInt();
+                    input_o(Pen, penQuantity);
+                    amt += calculateAmount("pen", penQuantity);
                     break;
                 case 2:
                     System.out.print("Enter quantity for Wooden tooth brush: ");
-                    input_o(TB, scanner.nextInt());
+                    int tbQuantity = scanner.nextInt();
+                    input_o(TB, tbQuantity);
+                    amt += calculateAmount("toothbrush", tbQuantity);
                     break;
                 case 3:
                     System.out.print("Enter quantity for Handmade books: ");
-                    input_o(HB, scanner.nextInt());
+                    int hbQuantity = scanner.nextInt();
+                    input_o(HB, hbQuantity);
+                    amt += calculateAmount("books", hbQuantity);
                     break;
                 case 4:
                     System.out.print("Enter quantity for Metal straws: ");
-                    input_o(MS, scanner.nextInt());
+                    int msQuantity = scanner.nextInt();
+                    input_o(MS, msQuantity);
+                    amt += calculateAmount("straws", msQuantity);
                     break;
                 case 5:
                     System.out.println("Order Complete");
@@ -131,6 +144,18 @@ public class Order extends Quantity { // subclass of Quantity
                     break;
             }
         } while (productChoice != 5);
+        System.out.println("Order Amount: " + amt);
+        amt = 0; // Reset amount for the next order
+    }
+
+    static int calculateAmount(String prod, int quantity) {
+        switch (prod) {
+            case "pen": return Pen_p * quantity;
+            case "toothbrush": return TB_p * quantity;
+            case "books": return HB_p * quantity;
+            case "straws": return MS_p * quantity;
+            default: return 0;
+        }
     }
 
     static void displayQuantities() {
